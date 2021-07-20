@@ -51,12 +51,14 @@ const styles = StyleSheet.create({
         height: 300,
     },
     price: {
+        fontFamily: 'open-sans-bold',
         fontSize: 20,
         color: '#888',
         textAlign: 'center',
         marginVertical: 20,
     },
     description: {
+        fontFamily: 'open-sans',
         fontSize: 14,
         textAlign: 'center',
         marginHorizontal: 20,
@@ -64,8 +66,7 @@ const styles = StyleSheet.create({
     action: {
         marginVertical: 10,
         alignItems: 'center',
-
-    }
+    },
 });
 
 export default ProductDetailScreen;
