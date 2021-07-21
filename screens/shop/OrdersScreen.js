@@ -11,7 +11,7 @@ const OrdersScreen = (props) => {
     return (
         <FlatList
             data={orders}
-            renderItem={(itemData) => <Text>{itemData.total}</Text>}
+            renderItem={(itemData) => <Text>{itemData.item.total}</Text>}
         />
     );
 };
