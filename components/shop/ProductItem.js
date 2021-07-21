@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
     View,
     Text,
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     },
     image: {
         width: '100%',
-        height: '60%',
+        height: '100%',
     },
     imageContainer: {
         width: '100%',
@@ -77,7 +77,8 @@ const styles = StyleSheet.create({
     },
     details: {
         alignItems: 'center',
-        height: '20%',
+        height: '18%',
+        marginTop: 5,
     },
     title: {
         fontFamily: 'open-sans-bold',
@@ -93,7 +94,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        height: '20%',
+        height: '22%',
         paddingHorizontal: 20,
     },
 });
