@@ -13,18 +13,18 @@ export default (state = initialState, action) => {
             const prodPrice = addedProduct.price;
             const prodTitle = addedProduct.title;
 
-            let newOrUpdateCartItem;
+            let newOrUpdatedCartItem;
 
             if (state.items[addedProduct.id]) {
                 // already have the item in the cartItem
-                newOrUpdateCartItem = new CartItem(
+                newOrUpdatedCartItem = new CartItem(
                     state.items[addedProduct.id].quantity + 1,
                     prodPrice,
                     prodTitle,
                     state.items[addedProduct.id].sum + prodPrice
                 );
             } else {
-                newOrUpdateCartItem = new CartItem(
+                newOrUpdatedCartItem = new CartItem(
                     1,
                     prodPrice,
                     prodTitle,
@@ -35,7 +35,7 @@ export default (state = initialState, action) => {
                 ...state,
                 items: {
                     ...state.items,
-                    [addedProduct.id]: newOrUpdateCartItem,
+                    [addedProduct.id]: newOrUpdatedCartItem,
                 },
                 total: state.total + prodPrice,
             };
@@ -47,13 +47,16 @@ export default (state = initialState, action) => {
             let updatedCartItem;
 
             if (quantity > 1) {
-                const decrement = new CartItem(
+                const decrementItem = new CartItem(
                     quantity - 1,
                     productPrice,
                     productTitle,
                     sum - productPrice
                 );
-                updatedCartItem = { ...state.items, [action.pid]: decrement };
+                updatedCartItem = {
+                    ...state.items,
+                    [action.pid]: decrementItem,
+                };
             } else {
                 updatedCartItem = { ...state.items };
                 delete updatedCartItem[action.pid];
