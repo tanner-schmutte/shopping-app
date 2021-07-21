@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
     View,
     Text,
@@ -21,18 +21,33 @@ const ProductItem = (props) => {
                     <Text style={styles.title}>{props.title}</Text>
                     <Text style={styles.price}>${props.price.toFixed(2)}</Text>
                 </View>
-                <View style={styles.actions}>
-                    <Button
-                        color={Colors.primary}
-                        title="View Details"
-                        onPress={props.onViewDetail}
-                    />
-                    <Button
-                        color={Colors.primary}
-                        title="Add To Cart"
-                        onPress={props.onAddToCart}
-                    />
-                </View>
+                {props.admin ? (
+                    <View style={styles.actions}>
+                        <Button
+                            color={Colors.primary}
+                            title="Edit"
+                            onPress={props.onEdit}
+                        />
+                        <Button
+                            color={Colors.primary}
+                            title="Delete"
+                            onPress={props.onDelete}
+                        />
+                    </View>
+                ) : (
+                    <View style={styles.actions}>
+                        <Button
+                            color={Colors.primary}
+                            title="View Details"
+                            onPress={props.onViewDetail}
+                        />
+                        <Button
+                            color={Colors.primary}
+                            title="Add To Cart"
+                            onPress={props.onAddToCart}
+                        />
+                    </View>
+                )}
             </View>
         </TouchableOpacity>
     );
