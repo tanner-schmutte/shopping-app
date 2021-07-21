@@ -62,8 +62,7 @@ const styles = StyleSheet.create({
     },
     details: {
         alignItems: 'center',
-        height: '15%',
-        padding: 10,
+        height: '20%',
     },
     title: {
         fontFamily: 'open-sans-bold',
@@ -79,7 +78,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        height: '25%',
+        height: '20%',
         paddingHorizontal: 20,
     },
 });
