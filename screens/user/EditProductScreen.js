@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { ScrollView, View, Text, TextInput, StyleSheet } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useSelector, useDispatch } from 'react-redux';
@@ -25,6 +25,10 @@ const EditProductScreen = (props) => {
     );
 
     const dispatch = useDispatch();
+
+    const imageUrlRef = useRef();
+    const priceRef = useRef();
+    const descriptionRef = useRef();
 
     const submitHandler = useCallback(() => {
         if (editedProduct) {
@@ -62,6 +66,10 @@ const EditProductScreen = (props) => {
                         style={styles.input}
                         value={title}
                         onChangeText={(text) => setTitle(text)}
+                        returnKeyType="next"
+                        onSubmitEditing={() => {
+                            imageUrlRef.current.focus();
+                        }}
                     ></TextInput>
                 </View>
                 <View style={styles.formControl}>
@@ -70,6 +78,11 @@ const EditProductScreen = (props) => {
                         style={styles.input}
                         value={imageUrl}
                         onChangeText={(text) => setImageUrl(text)}
+                        ref={imageUrlRef}
+                        returnKeyType="next"
+                        onSubmitEditing={() => {
+                            priceRef.current.focus();
+                        }}
                     ></TextInput>
                 </View>
                 {editedProduct ? null : (
@@ -78,7 +91,13 @@ const EditProductScreen = (props) => {
                         <TextInput
                             style={styles.input}
                             value={price}
+                            keyboardType="decimal-pad"
                             onChangeText={(text) => setPrice(text)}
+                            ref={priceRef}
+                            returnKeyType="next"
+                            onSubmitEditing={() => {
+                                descriptionRef.current.focus();
+                            }}
                         ></TextInput>
                     </View>
                 )}
@@ -87,6 +106,7 @@ const EditProductScreen = (props) => {
                     <TextInput
                         style={styles.input}
                         value={description}
+                        ref={descriptionRef}
                         onChangeText={(text) => setDescription(text)}
                     ></TextInput>
                 </View>
