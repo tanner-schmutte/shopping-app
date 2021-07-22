@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { ScrollView, View, Text, TextInput, StyleSheet } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import HeaderButton from '../../components/UI/HeaderButton';
+import * as productActions from '../../store/actions/products';
 
 const EditProductScreen = (props) => {
     const prodId = props.navigation.getParam('productId');
@@ -22,6 +23,34 @@ const EditProductScreen = (props) => {
     const [description, setDescription] = useState(
         editedProduct ? editedProduct.description : ''
     );
+
+    const dispatch = useDispatch();
+
+    const submitHandler = useCallback(() => {
+        if (editedProduct) {
+            dispatch(
+                productActions.updateProduct(
+                    prodId,
+                    title,
+                    description,
+                    imageUrl
+                )
+            );
+        } else {
+            dispatch(
+                productActions.createProduct(
+                    title,
+                    description,
+                    imageUrl,
+                    +price
+                )
+            );
+        }
+    }, [dispatch, prodId, title, description, imageUrl, price]);
+
+    useEffect(() => {
+        props.navigation.setParams({ submit: submitHandler });
+    }, [submitHandler]);
 
     return (
         <ScrollView>
@@ -42,14 +71,16 @@ const EditProductScreen = (props) => {
                         onChangeText={(text) => setImageUrl(text)}
                     ></TextInput>
                 </View>
-                {editedProduct ? null : <View style={styles.formControl}>
-                    <Text style={styles.label}>Price</Text>
-                    <TextInput
-                        style={styles.input}
-                        value={price}
-                        onChangeText={(text) => setPrice(text)}
-                    ></TextInput>
-                </View>}
+                {editedProduct ? null : (
+                    <View style={styles.formControl}>
+                        <Text style={styles.label}>Price</Text>
+                        <TextInput
+                            style={styles.input}
+                            value={price}
+                            onChangeText={(text) => setPrice(text)}
+                        ></TextInput>
+                    </View>
+                )}
                 <View style={styles.formControl}>
                     <Text style={styles.label}>Description</Text>
                     <TextInput
@@ -64,6 +95,7 @@ const EditProductScreen = (props) => {
 };
 
 EditProductScreen.navigationOptions = (navData) => {
+    const submitFn = navData.navigation.getParam('submit');
     return {
         headerTitle: navData.navigation.getParam('productId')
             ? 'Edit Product'
@@ -73,7 +105,7 @@ EditProductScreen.navigationOptions = (navData) => {
                 <Item
                     title="Save"
                     iconName="ios-checkmark"
-                    onPress={() => {}}
+                    onPress={submitFn}
                 />
             </HeaderButtons>
         ),
