@@ -1,6 +1,35 @@
+import Product from '../../models/product';
+
 export const DELETE_PRODUCT = 'DELETE_PRODUCT';
 export const CREATE_PRODUCT = 'CREATE_PRODUCT';
 export const UPDATE_PRODUCT = 'UPDATE_PRODUCT';
+export const SET_PRODUCTS = 'SET_PRODUCTS';
+
+export const fetchProducts = () => {
+    return async (dispatch) => {
+        const response = await fetch(
+            'https://shopping-app-b757b-default-rtdb.firebaseio.com/products.json'
+        );
+
+        const json = await response.json();
+        const loadedProducts = [];
+
+        for (const key in json) {
+            loadedProducts.push(
+                new Product(
+                    key,
+                    'u1',
+                    json[key].title,
+                    json[key].imageUrl,
+                    json[key].description,
+                    json[key].price
+                )
+            );
+        }
+
+        dispatch({ type: SET_PRODUCTS, products: loadedProducts });
+    };
+};
 
 export const deleteProduct = (productId) => {
     return { type: DELETE_PRODUCT, pid: productId };
@@ -30,7 +59,7 @@ export const createProduct = (title, description, imageUrl, price) => {
                 title,
                 description,
                 imageUrl,
-                price
+                price,
             },
         });
     };
