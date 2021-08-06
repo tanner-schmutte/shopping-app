@@ -1,4 +1,4 @@
-import React, { useReducer, useCallback } from 'react';
+import React, { useState, useReducer, useCallback } from 'react';
 import {
     ScrollView,
     StyleSheet,
@@ -38,6 +38,7 @@ const formReducer = (state, action) => {
 };
 
 const AuthScreen = (props) => {
+    const [isSignUp, setIsSignUp] = useState(false);
     const dispatch = useDispatch();
 
     const [formState, dispatchFormState] = useReducer(formReducer, {
@@ -52,13 +53,20 @@ const AuthScreen = (props) => {
         formIsValid: false,
     });
 
-    const signupHandler = () => {
-        dispatch(
-            authAction.signup(
+    const authHandler = () => {
+        let action;
+        if (isSignUp) {
+            action = authAction.signup(
                 formState.inputValues.email,
                 formState.inputValues.password
-            )
-        );
+            );
+        } else {
+            action = authAction.login(
+                formState.inputValues.email,
+                formState.inputValues.password
+            );
+        }
+        dispatch(action);
     };
 
     const inputChangeHandler = useCallback(
@@ -105,16 +113,18 @@ const AuthScreen = (props) => {
                 />
                 <View style={styles.buttonContainer}>
                     <Button
-                        title="Login"
+                        title={isSignUp ? 'Sign Up' : 'Login'}
                         color={Colors.primary}
-                        onPress={signupHandler}
+                        onPress={authHandler}
                     />
                 </View>
                 <View style={styles.buttonContainer}>
                     <Button
-                        title="Sign Up"
+                        title={`Switch to ${isSignUp ? 'Login' : 'Sign Up'}`}
                         color={Colors.accent}
-                        onPress={() => {}}
+                        onPress={() => {
+                            setIsSignUp((prevState) => !prevState);
+                        }}
                     />
                 </View>
             </ScrollView>
