@@ -5,6 +5,7 @@ import {
     View,
     KeyboardAvoidingView,
     Button,
+    ActivityIndicator,
 } from 'react-native';
 import { useDispatch } from 'react-redux';
 
@@ -38,6 +39,7 @@ const formReducer = (state, action) => {
 };
 
 const AuthScreen = (props) => {
+    const [isLoading, setIsLoading] = useState(false);
     const [isSignUp, setIsSignUp] = useState(false);
     const dispatch = useDispatch();
 
@@ -53,7 +55,7 @@ const AuthScreen = (props) => {
         formIsValid: false,
     });
 
-    const authHandler = () => {
+    const authHandler = async () => {
         let action;
         if (isSignUp) {
             action = authAction.signup(
@@ -66,7 +68,9 @@ const AuthScreen = (props) => {
                 formState.inputValues.password
             );
         }
-        dispatch(action);
+        setIsLoading(true);
+        await dispatch(action);
+        setIsLoading(false);
     };
 
     const inputChangeHandler = useCallback(
@@ -119,13 +123,22 @@ const AuthScreen = (props) => {
                     />
                 </View>
                 <View style={styles.buttonContainer}>
-                    <Button
-                        title={`Switch to ${isSignUp ? 'Login' : 'Sign Up'}`}
-                        color={Colors.accent}
-                        onPress={() => {
-                            setIsSignUp((prevState) => !prevState);
-                        }}
-                    />
+                    {isLoading ? (
+                        <ActivityIndicator
+                            size="small"
+                            color={Colors.primary}
+                        />
+                    ) : (
+                        <Button
+                            title={`Switch to ${
+                                isSignUp ? 'Login' : 'Sign Up'
+                            }`}
+                            color={Colors.accent}
+                            onPress={() => {
+                                setIsSignUp((prevState) => !prevState);
+                            }}
+                        />
+                    )}
                 </View>
             </ScrollView>
         </KeyboardAvoidingView>
