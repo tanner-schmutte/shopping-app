@@ -1,4 +1,4 @@
-import React, { useState, useReducer, useCallback } from 'react';
+import React, { useEffect, useState, useReducer, useCallback } from 'react';
 import {
     ScrollView,
     StyleSheet,
@@ -6,6 +6,7 @@ import {
     KeyboardAvoidingView,
     Button,
     ActivityIndicator,
+    Alert,
 } from 'react-native';
 import { useDispatch } from 'react-redux';
 
@@ -40,6 +41,7 @@ const formReducer = (state, action) => {
 
 const AuthScreen = (props) => {
     const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState();
     const [isSignUp, setIsSignUp] = useState(false);
     const dispatch = useDispatch();
 
@@ -55,6 +57,12 @@ const AuthScreen = (props) => {
         formIsValid: false,
     });
 
+    useEffect(() => {
+        if (error) {
+            Alert.alert('An error occurred.', error, [{ text: 'Okay' }]);
+        }
+    }, [error]);
+
     const authHandler = async () => {
         let action;
         if (isSignUp) {
@@ -68,9 +76,14 @@ const AuthScreen = (props) => {
                 formState.inputValues.password
             );
         }
+        setError(null);
         setIsLoading(true);
-        await dispatch(action);
-        setIsLoading(false);
+        try {
+            await dispatch(action);
+            setIsLoading(false);
+        } catch (err) {
+            setError(err.message);
+        }
     };
 
     const inputChangeHandler = useCallback(
